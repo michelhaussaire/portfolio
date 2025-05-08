@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "next-themes";
 
 interface Particle {
@@ -21,7 +21,7 @@ export function ParticlesBackground() {
   const isDark = resolvedTheme === "dark";
 
   // Inicializar partículas
-  const initParticles = () => {
+  const initParticles = useCallback(() => {
     if (!canvasRef.current) return;
 
     const width = window.innerWidth;
@@ -50,10 +50,10 @@ export function ParticlesBackground() {
     }
 
     particlesRef.current = particles;
-  };
+  }, [isDark]);
 
   // Animar partículas
-  const animateParticles = () => {
+  const animateParticles = useCallback(() => {
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
@@ -104,7 +104,7 @@ export function ParticlesBackground() {
     }
 
     animationRef.current = requestAnimationFrame(animateParticles);
-  };
+  }, [dimensions.width, dimensions.height, isDark]);
 
   // Efecto para inicializar y limpiar
   useEffect(() => {
@@ -127,7 +127,7 @@ export function ParticlesBackground() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [initParticles, animateParticles]);
 
   // Actualizar colores cuando cambia el tema
   useEffect(() => {

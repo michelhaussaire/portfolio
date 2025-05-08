@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "next-themes";
 
 interface Particle {
@@ -43,132 +43,30 @@ export function CursorEffect() {
   const animationRef = useRef<number | undefined>(undefined);
   const moveTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  // Inicializar canvas
-  useEffect(() => {
-    const handleResize = () => {
-      if (canvasRef.current) {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        canvasRef.current.width = width;
-        canvasRef.current.height = height;
-        setDimensions({ width, height });
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // Seguir al cursor
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const now = performance.now();
-      const oldPos = { ...mousePosition };
-      const newPos = { x: e.clientX, y: e.clientY };
-
-      // Calcular velocidad del movimiento
-      const dx = newPos.x - oldPos.x;
-      const dy = newPos.y - oldPos.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const timeDelta = now - lastTrailTimeRef.current;
-      const speed = (distance / Math.max(1, timeDelta)) * 16; // Normalizar a ~60fps
-
-      setPrevMousePosition(oldPos);
-      setMousePosition(newPos);
-      setMouseSpeed(speed);
-      setIsMoving(true);
-
-      // Añadir punto a la estela si ha pasado suficiente tiempo
-      if (now - lastTrailTimeRef.current > 16) {
-        // ~60fps
-        addTrailPoint(newPos.x, newPos.y);
-        lastTrailTimeRef.current = now;
-      }
-
-      // Resetear el timeout si existe
-      if (moveTimeout.current) {
-        clearTimeout(moveTimeout.current);
-      }
-
-      // Establecer un nuevo timeout
-      moveTimeout.current = setTimeout(() => {
-        setIsMoving(false);
-      }, 100);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        const now = performance.now();
-        const oldPos = { ...mousePosition };
-        const newPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-
-        // Calcular velocidad del movimiento
-        const dx = newPos.x - oldPos.x;
-        const dy = newPos.y - oldPos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const timeDelta = now - lastTrailTimeRef.current;
-        const speed = (distance / Math.max(1, timeDelta)) * 16; // Normalizar a ~60fps
-
-        setPrevMousePosition(oldPos);
-        setMousePosition(newPos);
-        setMouseSpeed(speed);
-        setIsMoving(true);
-
-        // Añadir punto a la estela si ha pasado suficiente tiempo
-        if (now - lastTrailTimeRef.current > 16) {
-          // ~60fps
-          addTrailPoint(newPos.x, newPos.y);
-          lastTrailTimeRef.current = now;
-        }
-
-        // Resetear el timeout si existe
-        if (moveTimeout.current) {
-          clearTimeout(moveTimeout.current);
-        }
-
-        // Establecer un nuevo timeout
-        moveTimeout.current = setTimeout(() => {
-          setIsMoving(false);
-        }, 100);
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchmove", handleTouchMove);
-      if (moveTimeout.current) {
-        clearTimeout(moveTimeout.current);
-      }
-    };
-  }, [mousePosition]);
-
+  // Define functions with useCallback
   // Añadir punto a la estela
-  const addTrailPoint = (x: number, y: number) => {
-    const maxAge = 25; // Duración de los puntos de la estela
-    trailPointsRef.current.push({
-      x,
-      y,
-      age: 0,
-      maxAge,
-      speed: mouseSpeed, // Guardar la velocidad actual para cada punto
-    });
+  const addTrailPoint = useCallback(
+    (x: number, y: number) => {
+      const maxAge = 25; // Duración de los puntos de la estela
+      trailPointsRef.current.push({
+        x,
+        y,
+        age: 0,
+        maxAge,
+        speed: mouseSpeed, // Guardar la velocidad actual para cada punto
+      });
 
-    // Limitar el número de puntos para optimización
-    if (trailPointsRef.current.length > 25) {
-      // Aumentado para mejores curvas
-      trailPointsRef.current = trailPointsRef.current.slice(-25);
-    }
-  };
+      // Limitar el número de puntos para optimización
+      if (trailPointsRef.current.length > 25) {
+        // Aumentado para mejores curvas
+        trailPointsRef.current = trailPointsRef.current.slice(-25);
+      }
+    },
+    [mouseSpeed]
+  );
 
   // Crear partículas
-  const createParticles = () => {
+  const createParticles = useCallback(() => {
     if (!isMoving) return;
 
     // Calcular velocidad del movimiento
@@ -269,7 +167,7 @@ export function CursorEffect() {
     if (particlesRef.current.length > 100) {
       particlesRef.current = particlesRef.current.slice(-100);
     }
-  };
+  }, [mousePosition, prevMousePosition, mouseSpeed, isMoving, isDark]);
 
   // Actualizar y dibujar partículas
   const updateParticles = (ctx: CanvasRenderingContext2D) => {
@@ -330,136 +228,243 @@ export function CursorEffect() {
   };
 
   // Actualizar y dibujar estela
-  const updateTrail = (ctx: CanvasRenderingContext2D) => {
-    // Actualizar edad de los puntos
-    trailPointsRef.current = trailPointsRef.current.filter((point) => {
-      point.age += 1;
-      return point.age < point.maxAge;
-    });
+  const updateTrail = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      // Actualizar edad de los puntos
+      trailPointsRef.current = trailPointsRef.current.filter((point) => {
+        point.age += 1;
+        return point.age < point.maxAge;
+      });
 
-    // Si no hay suficientes puntos, no dibujar
-    if (trailPointsRef.current.length < 2) return;
+      // Si no hay suficientes puntos, no dibujar
+      if (trailPointsRef.current.length < 2) return;
 
-    // Dibujar línea conectando los puntos usando curvas más suaves
-    ctx.beginPath();
+      // Dibujar línea conectando los puntos usando curvas más suaves
+      ctx.beginPath();
 
-    // Función para calcular puntos intermedios para curvas más suaves
-    const getSplinePoints = (
-      points: TrailPoint[],
-      tension = 0.35
-    ): [number, number][] => {
-      if (points.length < 2) return points.map((p) => [p.x, p.y]);
+      // Función para calcular puntos intermedios para curvas más suaves
+      const getSplinePoints = (
+        points: TrailPoint[],
+        tension = 0.35
+      ): [number, number][] => {
+        if (points.length < 2) return points.map((p) => [p.x, p.y]);
 
-      const result: [number, number][] = [];
+        const result: [number, number][] = [];
 
-      // Añadir el primer punto
-      result.push([points[0].x, points[0].y]);
+        // Añadir el primer punto
+        result.push([points[0].x, points[0].y]);
 
-      // Calcular puntos de control para cada segmento
-      for (let i = 0; i < points.length - 1; i++) {
-        const p0 = i > 0 ? points[i - 1] : points[i];
-        const p1 = points[i];
-        const p2 = points[i + 1];
-        const p3 = i < points.length - 2 ? points[i + 2] : p2;
+        // Calcular puntos de control para cada segmento
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = i > 0 ? points[i - 1] : points[i];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = i < points.length - 2 ? points[i + 2] : p2;
 
-        // Calcular puntos de la curva
-        const cp1x = p1.x + (p2.x - p0.x) * tension;
-        const cp1y = p1.y + (p2.y - p0.y) * tension;
-        const cp2x = p2.x - (p3.x - p1.x) * tension;
-        const cp2y = p2.y - (p3.y - p1.y) * tension;
+          // Calcular puntos de la curva
+          const cp1x = p1.x + (p2.x - p0.x) * tension;
+          const cp1y = p1.y + (p2.y - p0.y) * tension;
+          const cp2x = p2.x - (p3.x - p1.x) * tension;
+          const cp2y = p2.y - (p3.y - p1.y) * tension;
 
-        // Añadir puntos de control y punto final
-        result.push([cp1x, cp1y], [cp2x, cp2y], [p2.x, p2.y]);
-      }
+          // Añadir puntos de control y punto final
+          result.push([cp1x, cp1y], [cp2x, cp2y], [p2.x, p2.y]);
+        }
 
-      return result;
-    };
+        return result;
+      };
 
-    // Obtener puntos para la curva suavizada
-    const splinePoints = getSplinePoints(trailPointsRef.current);
+      // Obtener puntos para la curva suavizada
+      const splinePoints = getSplinePoints(trailPointsRef.current);
 
-    // Dibujar la curva
-    if (splinePoints.length >= 4) {
-      // Necesitamos al menos 4 puntos para una curva cúbica
-      ctx.moveTo(splinePoints[0][0], splinePoints[0][1]);
+      // Dibujar la curva
+      if (splinePoints.length >= 4) {
+        // Necesitamos al menos 4 puntos para una curva cúbica
+        ctx.moveTo(splinePoints[0][0], splinePoints[0][1]);
 
-      // Dibujar curvas cúbicas de Bezier
-      for (let i = 1; i < splinePoints.length - 2; i += 3) {
-        ctx.bezierCurveTo(
-          splinePoints[i][0],
-          splinePoints[i][1],
-          splinePoints[i + 1][0],
-          splinePoints[i + 1][1],
-          splinePoints[i + 2][0],
-          splinePoints[i + 2][1]
-        );
-      }
-    }
-
-    // Configurar estilo de línea con grosor variable basado en la velocidad
-    const maxLineWidth = isDark ? 2.5 : 2;
-    const minLineWidth = isDark ? 1 : 0.75;
-
-    // Configurar estilo de línea
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    // Crear un gradiente para el trazo que varía según la velocidad
-    const gradient = ctx.createLinearGradient(
-      trailPointsRef.current[0].x,
-      trailPointsRef.current[0].y,
-      trailPointsRef.current[trailPointsRef.current.length - 1].x,
-      trailPointsRef.current[trailPointsRef.current.length - 1].y
-    );
-
-    // Colores según el tema, mejorados para mayor visibilidad
-    if (isDark) {
-      gradient.addColorStop(0, "rgba(6, 182, 212, 0)");
-      gradient.addColorStop(0.3, "rgba(6, 182, 212, 0.15)");
-      gradient.addColorStop(0.7, "rgba(6, 182, 212, 0.25)");
-      gradient.addColorStop(1, "rgba(6, 182, 212, 0.35)");
-    } else {
-      gradient.addColorStop(0, "rgba(6, 182, 212, 0)");
-      gradient.addColorStop(0.3, "rgba(6, 182, 212, 0.1)");
-      gradient.addColorStop(0.7, "rgba(6, 182, 212, 0.15)");
-      gradient.addColorStop(1, "rgba(6, 182, 212, 0.25)");
-    }
-
-    ctx.strokeStyle = gradient;
-
-    // Aplicar anchura de línea variable para puntos con diferentes velocidades
-    for (let i = 0; i < trailPointsRef.current.length - 1; i++) {
-      const point = trailPointsRef.current[i];
-      const nextPoint = trailPointsRef.current[i + 1];
-
-      // Calcular ancho basado en velocidad y edad
-      const speedFactor = Math.min(1, point.speed / 50);
-      const ageFactor = 1 - point.age / point.maxAge;
-      const lineWidth =
-        minLineWidth + (maxLineWidth - minLineWidth) * speedFactor * ageFactor;
-
-      // Crear un path separado para cada segmento para aplicar ancho variable
-      if (i < trailPointsRef.current.length - 2) {
-        ctx.beginPath();
-        ctx.lineWidth = lineWidth;
-
-        // Usar los puntos de control calculados previamente
-        const idx = i * 3;
-        if (idx + 3 < splinePoints.length) {
-          ctx.moveTo(splinePoints[idx][0], splinePoints[idx][1]);
+        // Dibujar curvas cúbicas de Bezier
+        for (let i = 1; i < splinePoints.length - 2; i += 3) {
           ctx.bezierCurveTo(
-            splinePoints[idx + 1][0],
-            splinePoints[idx + 1][1],
-            splinePoints[idx + 2][0],
-            splinePoints[idx + 2][1],
-            splinePoints[idx + 3][0],
-            splinePoints[idx + 3][1]
+            splinePoints[i][0],
+            splinePoints[i][1],
+            splinePoints[i + 1][0],
+            splinePoints[i + 1][1],
+            splinePoints[i + 2][0],
+            splinePoints[i + 2][1]
           );
-          ctx.stroke();
         }
       }
-    }
-  };
+
+      // Configurar estilo de línea con grosor variable basado en la velocidad
+      const maxLineWidth = isDark ? 2.5 : 2;
+      const minLineWidth = isDark ? 1 : 0.75;
+
+      // Configurar estilo de línea
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      // Crear un gradiente para el trazo que varía según la velocidad
+      const gradient = ctx.createLinearGradient(
+        trailPointsRef.current[0].x,
+        trailPointsRef.current[0].y,
+        trailPointsRef.current[trailPointsRef.current.length - 1].x,
+        trailPointsRef.current[trailPointsRef.current.length - 1].y
+      );
+
+      // Colores según el tema, mejorados para mayor visibilidad
+      if (isDark) {
+        gradient.addColorStop(0, "rgba(6, 182, 212, 0)");
+        gradient.addColorStop(0.3, "rgba(6, 182, 212, 0.15)");
+        gradient.addColorStop(0.7, "rgba(6, 182, 212, 0.25)");
+        gradient.addColorStop(1, "rgba(6, 182, 212, 0.35)");
+      } else {
+        gradient.addColorStop(0, "rgba(6, 182, 212, 0)");
+        gradient.addColorStop(0.3, "rgba(6, 182, 212, 0.1)");
+        gradient.addColorStop(0.7, "rgba(6, 182, 212, 0.15)");
+        gradient.addColorStop(1, "rgba(6, 182, 212, 0.25)");
+      }
+
+      ctx.strokeStyle = gradient;
+
+      // Aplicar anchura de línea variable para puntos con diferentes velocidades
+      for (let i = 0; i < trailPointsRef.current.length - 1; i++) {
+        const point = trailPointsRef.current[i];
+        const nextPoint = trailPointsRef.current[i + 1];
+
+        // Calcular ancho basado en velocidad y edad
+        const speedFactor = Math.min(1, point.speed / 50);
+        const ageFactor = 1 - point.age / point.maxAge;
+        const lineWidth =
+          minLineWidth +
+          (maxLineWidth - minLineWidth) * speedFactor * ageFactor;
+
+        // Crear un path separado para cada segmento para aplicar ancho variable
+        if (i < trailPointsRef.current.length - 2) {
+          ctx.beginPath();
+          ctx.lineWidth = lineWidth;
+
+          // Usar los puntos de control calculados previamente
+          const idx = i * 3;
+          if (idx + 3 < splinePoints.length) {
+            ctx.moveTo(splinePoints[idx][0], splinePoints[idx][1]);
+            ctx.bezierCurveTo(
+              splinePoints[idx + 1][0],
+              splinePoints[idx + 1][1],
+              splinePoints[idx + 2][0],
+              splinePoints[idx + 2][1],
+              splinePoints[idx + 3][0],
+              splinePoints[idx + 3][1]
+            );
+            ctx.stroke();
+          }
+        }
+      }
+    },
+    [isDark]
+  );
+
+  // Inicializar canvas
+  useEffect(() => {
+    const handleResize = () => {
+      if (canvasRef.current) {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        canvasRef.current.width = width;
+        canvasRef.current.height = height;
+        setDimensions({ width, height });
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Seguir al cursor
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const now = Date.now();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      // Update mouse position
+      setMousePosition({ x: mouseX, y: mouseY });
+
+      // Calculate mouse speed
+      const dx = mouseX - prevMousePosition.x;
+      const dy = mouseY - prevMousePosition.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const speed = Math.min(Math.max(distance, 0), 75);
+      setMouseSpeed(speed);
+
+      // Add point to the trail if there is movement
+      if (distance > 5) {
+        addTrailPoint(mouseX, mouseY);
+        setPrevMousePosition({ x: mouseX, y: mouseY });
+        setIsMoving(true);
+
+        if (moveTimeout.current) {
+          clearTimeout(moveTimeout.current);
+        }
+
+        // Reset movement detection after a delay
+        moveTimeout.current = setTimeout(() => {
+          setIsMoving(false);
+        }, 100);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const now = performance.now();
+        const oldPos = { ...mousePosition };
+        const newPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+        // Calcular velocidad del movimiento
+        const dx = newPos.x - oldPos.x;
+        const dy = newPos.y - oldPos.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const timeDelta = now - lastTrailTimeRef.current;
+        const speed = (distance / Math.max(1, timeDelta)) * 16; // Normalizar a ~60fps
+
+        setPrevMousePosition(oldPos);
+        setMousePosition(newPos);
+        setMouseSpeed(speed);
+        setIsMoving(true);
+
+        // Añadir punto a la estela si ha pasado suficiente tiempo
+        if (now - lastTrailTimeRef.current > 16) {
+          // ~60fps
+          addTrailPoint(newPos.x, newPos.y);
+          lastTrailTimeRef.current = now;
+        }
+
+        // Resetear el timeout si existe
+        if (moveTimeout.current) {
+          clearTimeout(moveTimeout.current);
+        }
+
+        // Establecer un nuevo timeout
+        moveTimeout.current = setTimeout(() => {
+          setIsMoving(false);
+        }, 100);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      if (moveTimeout.current) {
+        clearTimeout(moveTimeout.current);
+      }
+    };
+  }, [mousePosition, prevMousePosition, addTrailPoint]);
 
   // Dibujar efecto de luz
   useEffect(() => {
@@ -546,6 +551,8 @@ export function CursorEffect() {
     isDark,
     isMoving,
     mouseSpeed,
+    createParticles,
+    updateTrail,
   ]);
 
   return (

@@ -62,7 +62,7 @@ export function ContactForm() {
             Message Sent!
           </h3>
           <p className="text-slate-700 dark:text-slate-300">
-            Thank you for contacting me. I'll respond as soon as possible.
+            Thank you for contacting me. I&apos;ll respond as soon as possible.
           </p>
           <Button
             type="button"
