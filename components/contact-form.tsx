@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { sendContactEmail } from "@/app/actions";
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -32,11 +31,28 @@ export function ContactForm() {
     setError("");
 
     try {
-      await sendContactEmail(formData);
+      // Use Formspree to handle form submissions in static sites
+      // Replace 'YOUR_FORM_ID' with your actual Formspree form ID
+      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message. Please try again later.");
+      }
+
       setIsSuccess(true);
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
-      setError("There was a problem sending your message. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "There was a problem sending your message. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
