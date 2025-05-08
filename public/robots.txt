@@ -1,0 +1,6 @@
+# robots.txt file for Miguel Romero Portfolio
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://hibi.dev/sitemap.xml 

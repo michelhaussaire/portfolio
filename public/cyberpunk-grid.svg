@@ -1,0 +1,70 @@
+<svg width="1440" height="1024" viewBox="0 0 1440 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Grid Background -->
+  <rect width="100%" height="100%" fill="#000" opacity="0.3"/>
+  
+  <!-- Horizontal Grid Lines -->
+  <g stroke="#06B6D4" stroke-width="1" opacity="0.3">
+    <line x1="0" y1="0" x2="1440" y2="0" />
+    <line x1="0" y1="64" x2="1440" y2="64" />
+    <line x1="0" y1="128" x2="1440" y2="128" />
+    <line x1="0" y1="192" x2="1440" y2="192" />
+    <line x1="0" y1="256" x2="1440" y2="256" />
+    <line x1="0" y1="320" x2="1440" y2="320" />
+    <line x1="0" y1="384" x2="1440" y2="384" />
+    <line x1="0" y1="448" x2="1440" y2="448" />
+    <line x1="0" y1="512" x2="1440" y2="512" />
+    <line x1="0" y1="576" x2="1440" y2="576" />
+    <line x1="0" y1="640" x2="1440" y2="640" />
+    <line x1="0" y1="704" x2="1440" y2="704" />
+    <line x1="0" y1="768" x2="1440" y2="768" />
+    <line x1="0" y1="832" x2="1440" y2="832" />
+    <line x1="0" y1="896" x2="1440" y2="896" />
+    <line x1="0" y1="960" x2="1440" y2="960" />
+    <line x1="0" y1="1024" x2="1440" y2="1024" />
+  </g>
+  
+  <!-- Vertical Grid Lines -->
+  <g stroke="#0EA5E9" stroke-width="1" opacity="0.3">
+    <line x1="0" y1="0" x2="0" y2="1024" />
+    <line x1="90" y1="0" x2="90" y2="1024" />
+    <line x1="180" y1="0" x2="180" y2="1024" />
+    <line x1="270" y1="0" x2="270" y2="1024" />
+    <line x1="360" y1="0" x2="360" y2="1024" />
+    <line x1="450" y1="0" x2="450" y2="1024" />
+    <line x1="540" y1="0" x2="540" y2="1024" />
+    <line x1="630" y1="0" x2="630" y2="1024" />
+    <line x1="720" y1="0" x2="720" y2="1024" />
+    <line x1="810" y1="0" x2="810" y2="1024" />
+    <line x1="900" y1="0" x2="900" y2="1024" />
+    <line x1="990" y1="0" x2="990" y2="1024" />
+    <line x1="1080" y1="0" x2="1080" y2="1024" />
+    <line x1="1170" y1="0" x2="1170" y2="1024" />
+    <line x1="1260" y1="0" x2="1260" y2="1024" />
+    <line x1="1350" y1="0" x2="1350" y2="1024" />
+    <line x1="1440" y1="0" x2="1440" y2="1024" />
+  </g>
+  
+  <!-- Neon Accent Lines -->
+  <g>
+    <line x1="0" y1="512" x2="1440" y2="512" stroke="#06B6D4" stroke-width="2" opacity="0.8">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite" />
+    </line>
+    <line x1="720" y1="0" x2="720" y2="1024" stroke="#0EA5E9" stroke-width="2" opacity="0.8">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite" />
+    </line>
+  </g>
+  
+  <!-- Glowing Circles -->
+  <circle cx="720" cy="512" r="150" fill="url(#cyberpunkGradient)" opacity="0.15">
+    <animate attributeName="r" values="150;180;150" dur="8s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0.1;0.2;0.1" dur="8s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="cyberpunkGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+</svg> 

@@ -1,0 +1,546 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Updated color palette using #005265 (deep teal) and #13d4dd (bright cyan) */
+    --background: 210 50% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 189 100% 33%; /* Based on #005265 */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 187 84% 47%; /* Based on #13d4dd */
+    --secondary-foreground: 189 100% 33%;
+
+    --muted: 189 30% 96%;
+    --muted-foreground: 215 16% 46%;
+
+    --accent: 187 84% 47%;
+    --accent-foreground: 189 100% 33%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 189 30% 90%;
+    --input: 189 30% 90%;
+    --ring: 189 100% 33%;
+
+    --radius: 0.5rem;
+
+    /* Refined neomorphism variables - light theme */
+    --neo-bg: 210 50% 98%;
+    --neo-gradient-from: rgba(255, 255, 255, 1);
+    --neo-gradient-to: rgba(236, 246, 255, 1);
+
+    /* Updated shadows with new colors */
+    --neo-shadow: 5px 5px 10px rgba(176, 195, 210, 0.5), -5px -5px 10px rgba(255, 255, 255, 0.8), 0 0 2px
+      rgba(19, 212, 221, 0.2);
+    --neo-shadow-hover: 7px 7px 14px rgba(176, 195, 210, 0.6), -7px -7px 14px rgba(255, 255, 255, 0.9), 0 0 4px
+      rgba(19, 212, 221, 0.3);
+    --neo-shadow-inset: inset 4px 4px 8px rgba(176, 195, 210, 0.5), inset -4px -4px 8px rgba(255, 255, 255, 0.8), inset
+      0 0 2px rgba(19, 212, 221, 0.2);
+
+    /* Updated gradient variables with new colors */
+    --gradient-primary: linear-gradient(135deg, #13d4dd, #005265);
+    --gradient-secondary: linear-gradient(135deg, #68e0e6, #0c7d91);
+    --gradient-surface: linear-gradient(145deg, #ffffff, #f0f9ff);
+    --gradient-accent: linear-gradient(135deg, #0f9ba5, #004050);
+
+    /* Updated neon glow variables */
+    --neon-cyan: rgba(19, 212, 221, 0.3);
+    --neon-blue: rgba(0, 82, 101, 0.3);
+    --neon-glow: 0 0 5px var(--neon-cyan);
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 187 84% 47%; /* Based on #13d4dd */
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 189 100% 20%; /* Darker version of #005265 */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 189 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 189 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 189 33% 17%;
+    --input: 189 33% 17%;
+    --ring: 187 84% 47%;
+
+    /* Refined neomorphism variables - dark theme */
+    --neo-bg: 222 47% 6%;
+    --neo-gradient-from: rgba(30, 41, 59, 0.8);
+    --neo-gradient-to: rgba(15, 23, 42, 1);
+
+    /* Updated shadows with new colors for dark theme */
+    --neo-shadow-dark: 5px 5px 10px rgba(0, 0, 0, 0.6), -5px -5px 10px rgba(30, 41, 59, 0.2), 0 0 4px
+      rgba(19, 212, 221, 0.3);
+    --neo-shadow-dark-hover: 7px 7px 14px rgba(0, 0, 0, 0.7), -7px -7px 14px rgba(30, 41, 59, 0.3), 0 0 8px
+      rgba(19, 212, 221, 0.4);
+    --neo-shadow-inset-dark: inset 4px 4px 8px rgba(0, 0, 0, 0.6), inset -4px -4px 8px rgba(30, 41, 59, 0.2), inset 0 0
+      4px rgba(19, 212, 221, 0.3);
+
+    /* Updated gradient variables for dark mode with new colors */
+    --gradient-primary: linear-gradient(135deg, #0d9da5, #004050);
+    --gradient-secondary: linear-gradient(135deg, #13d4dd, #005265);
+    --gradient-surface: linear-gradient(145deg, #1e293b, #0f172a);
+    --gradient-accent: linear-gradient(135deg, #0a8891, #003b4a);
+
+    /* Updated neon glow variables for dark mode */
+    --neon-cyan: rgba(19, 212, 221, 0.5);
+    --neon-blue: rgba(0, 82, 101, 0.5);
+    --neon-glow: 0 0 8px var(--neon-cyan), 0 0 12px var(--neon-blue);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Glassmorphism styles */
+.glass-card {
+  @apply backdrop-blur-xl bg-white/60 dark:bg-slate-900/30 border border-white/40 dark:border-white/10 relative overflow-hidden shadow-sm;
+}
+
+.glass-button {
+  @apply backdrop-blur-xl bg-white/50 dark:bg-slate-900/20 border border-white/40 dark:border-white/10 hover:bg-white/70 dark:hover:bg-slate-800/30 transition-all duration-300;
+}
+
+.glass-input {
+  @apply backdrop-blur-xl bg-white/50 dark:bg-slate-900/20 border border-white/40 dark:border-white/10 focus:outline-none transition-all duration-300;
+}
+
+.glass-tag {
+  @apply backdrop-blur-xl bg-white/50 dark:bg-slate-900/20 border border-white/40 dark:border-white/10;
+}
+
+/* Enhanced Neomorphism styles with neon effect */
+.neo-card {
+  @apply rounded-2xl relative overflow-hidden transition-all duration-300;
+  background-color: #f0f9ff;
+  background-image: var(--gradient-surface);
+  box-shadow: var(--neo-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .neo-card {
+  background-color: #1e293b;
+  box-shadow: var(--neo-shadow-dark);
+  border: 1px solid rgba(6, 182, 212, 0.05);
+}
+
+.neo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--neo-shadow-hover);
+}
+
+.dark .neo-card:hover {
+  box-shadow: var(--neo-shadow-dark-hover);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+/* Neo button enhancements */
+.neo-button {
+  @apply rounded-full relative overflow-hidden transition-all duration-300;
+  background-color: #f0f9ff;
+  background-image: var(--gradient-surface);
+  box-shadow: var(--neo-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .neo-button {
+  background-color: #1e293b;
+  box-shadow: var(--neo-shadow-dark);
+  border: 1px solid rgba(6, 182, 212, 0.05);
+}
+
+.neo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--neo-shadow-hover);
+}
+
+.dark .neo-button:hover {
+  box-shadow: var(--neo-shadow-dark-hover);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+.neo-button:active {
+  transform: translateY(1px);
+  box-shadow: var(--neo-shadow-inset);
+}
+
+.dark .neo-button:active {
+  box-shadow: var(--neo-shadow-inset-dark);
+}
+
+.neo-button::after {
+  display: none;
+}
+
+.neo-input {
+  @apply rounded-lg relative overflow-hidden transition-all duration-300;
+  background-color: #f0f9ff;
+  background-image: var(--gradient-surface);
+  box-shadow: var(--neo-shadow);
+}
+
+.neo-input:focus {
+  box-shadow: var(--neo-shadow-inset);
+  outline: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+.dark .neo-input {
+  background-color: #1e293b;
+  box-shadow: var(--neo-shadow-dark);
+  border: 1px solid rgba(6, 182, 212, 0.05);
+}
+
+.dark .neo-input:focus {
+  box-shadow: var(--neo-shadow-inset-dark);
+  outline: 2px solid rgba(6, 182, 212, 0.3);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.neo-tag {
+  @apply rounded-full relative overflow-hidden transition-all duration-300;
+  background-color: #f0f9ff;
+  background-image: var(--gradient-surface);
+  box-shadow: var(--neo-shadow);
+}
+
+.dark .neo-tag {
+  background-color: #1e293b;
+  box-shadow: var(--neo-shadow-dark);
+  border: 1px solid rgba(6, 182, 212, 0.05);
+}
+
+.dark .neo-tag:hover {
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  box-shadow: var(--neo-shadow-dark-hover);
+}
+
+/* Neon text effect */
+.neon-text {
+  color: #005265;
+  text-shadow: 0 0 2px rgba(19, 212, 221, 0.3);
+}
+
+.dark .neon-text {
+  color: #13d4dd;
+  text-shadow: 0 0 5px rgba(19, 212, 221, 0.5), 0 0 10px rgba(19, 212, 221, 0.3);
+}
+
+/* Cyberpunk styling */
+.cyberpunk-text {
+  font-family: monospace, 'Courier New', Courier;
+  letter-spacing: 0.5px;
+}
+
+.cyberpunk-glitch {
+  position: relative;
+  animation: glitch 3s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+      0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+      0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+      -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+      -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75),
+      0 -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75),
+      0 -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+      -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+}
+
+/* Cyberpunk button styling */
+.cyberpunk-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyberpunk-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: linear-gradient(45deg, #06b6d4, transparent, #3b82f6, transparent, #06b6d4);
+  background-size: 400%;
+  z-index: -1;
+  animation: cyberpunk-border 6s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cyberpunk-button:hover::before {
+  opacity: 1;
+}
+
+@keyframes cyberpunk-border {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 300% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Enhanced neon border for cyberpunk look */
+.neon-border {
+  border: 1px solid rgba(19, 212, 221, 0.3);
+  box-shadow: 0 0 5px rgba(19, 212, 221, 0.2);
+}
+
+.dark .neon-border {
+  border: 1px solid rgba(19, 212, 221, 0.3);
+  box-shadow: 0 0 8px rgba(19, 212, 221, 0.4), 0 0 12px rgba(0, 82, 101, 0.2);
+}
+
+/* Gradient buttons */
+.gradient-btn {
+  @apply text-white font-medium;
+  background-image: var(--gradient-primary);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 10px rgba(19, 212, 221, 0.3);
+  overflow: hidden;
+}
+
+.dark .gradient-btn {
+  box-shadow: 0 0 15px rgba(19, 212, 221, 0.4);
+}
+
+.gradient-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--gradient-accent);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
+/* Removing the shimmer effect */
+.gradient-btn::after {
+  display: none;
+}
+
+.gradient-btn:hover::before {
+  opacity: 1;
+}
+
+.gradient-btn:hover {
+  box-shadow: 0 0 15px rgba(19, 212, 221, 0.5);
+}
+
+.dark .gradient-btn:hover {
+  box-shadow: 0 0 20px rgba(19, 212, 221, 0.6);
+}
+
+/* Grid background */
+@layer utilities {
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 0.1;
+    }
+    50% {
+      opacity: 0.2;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes scan {
+    0% {
+      top: 0%;
+    }
+    100% {
+      top: 100%;
+    }
+  }
+  
+  .animate-scan {
+    animation: scan 3s linear infinite;
+  }
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(19, 212, 221, 0.3);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(19, 212, 221, 0.5);
+}
+
+/* Smooth theme transitions */
+.dark body,
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Enhanced background gradients */
+body {
+  background-image: radial-gradient(circle at top right, rgba(19, 212, 221, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, rgba(0, 82, 101, 0.15) 0%, transparent 40%);
+}
+
+.dark body {
+  background-image: radial-gradient(circle at top right, rgba(19, 212, 221, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, rgba(0, 82, 101, 0.05) 0%, transparent 40%);
+}
+
+/* Refined glow effect */
+.glow {
+  position: relative;
+}
+
+.glow::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  background: radial-gradient(circle, rgba(19, 212, 221, 0.2) 0%, transparent 70%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  filter: blur(10px);
+}
+
+.dark .glow::after {
+  background: radial-gradient(circle, rgba(19, 212, 221, 0.15) 0%, transparent 70%);
+}
+
+.glow:hover::after {
+  opacity: 1;
+}
+
+/* 3D text effect */
+.text-3d {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .text-3d {
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Section dividers */
+.section-divider {
+  position: relative;
+  padding-bottom: 3rem;
+}
+
+.section-divider::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(19, 212, 221, 0.3), transparent);
+}
+
+.dark .section-divider::after {
+  background: linear-gradient(to right, transparent, rgba(19, 212, 221, 0.5), transparent);
+}
+
+.section-divider::before {
+  content: "•";
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(19, 212, 221, 0.4);
+  z-index: 1;
+  text-shadow: 0 0 5px rgba(19, 212, 221, 0.3);
+}
+
+.dark .section-divider::before {
+  color: rgba(19, 212, 221, 0.6);
+  text-shadow: 0 0 8px rgba(19, 212, 221, 0.5);
+}
