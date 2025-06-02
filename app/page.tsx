@@ -23,47 +23,47 @@ const categories = ["All", "Frontend", "Backend", "Full Stack", "UI/UX"];
 const projects = [
   {
     id: 1,
-    title: "Hibi.dev Website Platform",
-    description:
-      "A full-stack website platform with custom content management, SEO optimization, and responsive design for clients across multiple industries.",
-    tags: ["React", "Node.js", "Tailwind CSS", "Supabase"],
-    categories: ["Full Stack", "Frontend", "Backend"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "https://hibi.dev",
-    repoUrl: "#",
-  },
-  {
-    id: 2,
-    title: "Mobile Appointment Scheduler",
-    description:
-      "A cross-platform mobile application for scheduling and managing appointments with real-time notifications and calendar integration.",
-    tags: ["React Native", "Expo", "Firebase", "NativeWind"],
-    categories: ["Frontend", "Mobile"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "#",
-    repoUrl: "#",
-  },
-  {
-    id: 3,
-    title: "AI Document Processor",
-    description:
-      "An intelligent document processing system that uses AI to extract, classify, and process information from various document types.",
-    tags: ["Python", "OpenAI", "React", "Supabase"],
-    categories: ["Full Stack", "UI/UX", "Backend"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "#",
-    repoUrl: "#",
-  },
-  {
-    id: 4,
     title: "Portfolio Website",
     description:
       "A responsive portfolio website with modern design, dark mode support, and smooth animations to showcase professional skills and projects.",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
     categories: ["Frontend", "UI/UX"],
     imageUrl: "/placeholder.svg?height=300&width=500",
+    demoUrl: "https://michelhaussaire.github.io/portfolio",
+    repoUrl: "https://github.com/michelhaussaire/portfolio",
+  },
+  {
+    id: 2,
+    title: "TF Excursionista",
+    description:
+      "A TypeScript-based application designed for hiking and excursion management, featuring modern web technologies and responsive design.",
+    tags: ["TypeScript", "React", "Modern Web", "Responsive"],
+    categories: ["Frontend", "Full Stack"],
+    imageUrl: "/placeholder.svg?height=300&width=500",
     demoUrl: "#",
-    repoUrl: "#",
+    repoUrl: "https://github.com/michelhaussaire/tf-excursionista",
+  },
+  {
+    id: 3,
+    title: "TF Repository",
+    description:
+      "A comprehensive web application built with HTML and modern web technologies, showcasing full-stack development capabilities.",
+    tags: ["HTML", "CSS", "JavaScript", "Web Development"],
+    categories: ["Frontend", "Full Stack"],
+    imageUrl: "/placeholder.svg?height=300&width=500",
+    demoUrl: "#",
+    repoUrl: "https://github.com/michelhaussaire/tf-repo",
+  },
+  {
+    id: 4,
+    title: "Finance Python",
+    description:
+      "A Python-based financial analysis tool using Jupyter Notebook for data analysis, visualization, and financial modeling.",
+    tags: ["Python", "Jupyter", "Data Analysis", "Finance"],
+    categories: ["Backend", "Data Science"],
+    imageUrl: "/placeholder.svg?height=300&width=500",
+    demoUrl: "#",
+    repoUrl: "https://github.com/michelhaussaire/Finance-python",
   },
 ];
 
