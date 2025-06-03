@@ -15,57 +15,10 @@ import { ContactForm } from "@/components/contact-form";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CursorEffect } from "@/components/cursor-effect";
+import { getImageSrc } from "@/lib/utils";
 
 // Project categories
 const categories = ["All", "Frontend", "Backend", "Full Stack", "UI/UX"];
-
-// Project data
-const projects = [
-  {
-    id: 1,
-    title: "Portfolio Website",
-    description:
-      "A responsive portfolio website with modern design, dark mode support, and smooth animations to showcase professional skills and projects.",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    categories: ["Frontend", "UI/UX"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "https://michelhaussaire.github.io/portfolio",
-    repoUrl: "https://github.com/michelhaussaire/portfolio",
-  },
-  {
-    id: 2,
-    title: "TF Excursionista",
-    description:
-      "A TypeScript-based application designed for hiking and excursion management, featuring modern web technologies and responsive design.",
-    tags: ["TypeScript", "React", "Modern Web", "Responsive"],
-    categories: ["Frontend", "Full Stack"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "#",
-    repoUrl: "https://github.com/michelhaussaire/tf-excursionista",
-  },
-  {
-    id: 3,
-    title: "TF Repository",
-    description:
-      "A comprehensive web application built with HTML and modern web technologies, showcasing full-stack development capabilities.",
-    tags: ["HTML", "CSS", "JavaScript", "Web Development"],
-    categories: ["Frontend", "Full Stack"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "#",
-    repoUrl: "https://github.com/michelhaussaire/tf-repo",
-  },
-  {
-    id: 4,
-    title: "Finance Python",
-    description:
-      "A Python-based financial analysis tool using Jupyter Notebook for data analysis, visualization, and financial modeling.",
-    tags: ["Python", "Jupyter", "Data Analysis", "Finance"],
-    categories: ["Backend", "Data Science"],
-    imageUrl: "/placeholder.svg?height=300&width=500",
-    demoUrl: "#",
-    repoUrl: "https://github.com/michelhaussaire/Finance-python",
-  },
-];
 
 // Animation variants
 const fadeInUp = {
@@ -117,6 +70,54 @@ export default function Home() {
       behavior: "smooth",
     });
   };
+
+  // Project data with proper image paths
+  const projects = [
+    {
+      id: 1,
+      title: "Portfolio Website",
+      description:
+        "A responsive portfolio website with modern design, dark mode support, and smooth animations to showcase professional skills and projects.",
+      tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      categories: ["Frontend", "UI/UX"],
+      imageUrl: getImageSrc("/placeholder.svg?height=300&width=500"),
+      demoUrl: "https://michelhaussaire.github.io/portfolio",
+      repoUrl: "https://github.com/michelhaussaire/portfolio",
+    },
+    {
+      id: 2,
+      title: "TF Excursionista",
+      description:
+        "A TypeScript-based application designed for hiking and excursion management, featuring modern web technologies and responsive design.",
+      tags: ["TypeScript", "React", "Modern Web", "Responsive"],
+      categories: ["Frontend", "Full Stack"],
+      imageUrl: getImageSrc("/placeholder.svg?height=300&width=500"),
+      demoUrl: "#",
+      repoUrl: "https://github.com/michelhaussaire/tf-excursionista",
+    },
+    {
+      id: 3,
+      title: "TF Repository",
+      description:
+        "A comprehensive web application built with HTML and modern web technologies, showcasing full-stack development capabilities.",
+      tags: ["HTML", "CSS", "JavaScript", "Web Development"],
+      categories: ["Frontend", "Full Stack"],
+      imageUrl: getImageSrc("/placeholder.svg?height=300&width=500"),
+      demoUrl: "#",
+      repoUrl: "https://github.com/michelhaussaire/tf-repo",
+    },
+    {
+      id: 4,
+      title: "Finance Python",
+      description:
+        "A Python-based financial analysis tool using Jupyter Notebook for data analysis, visualization, and financial modeling.",
+      tags: ["Python", "Jupyter", "Data Analysis", "Finance"],
+      categories: ["Backend", "Data Science"],
+      imageUrl: getImageSrc("/placeholder.svg?height=300&width=500"),
+      demoUrl: "#",
+      repoUrl: "https://github.com/michelhaussaire/Finance-python",
+    },
+  ];
 
   // Filter projects by category
   const filteredProjects =
@@ -317,7 +318,7 @@ export default function Home() {
                   <div className="absolute top-[30%] left-[-5%] w-48 h-56 bg-gradient-to-br from-[#13d4dd]/35 to-transparent rounded-full blur-xl rotate-45 animate-pulse-slow"></div>
 
                   <Image
-                    src="/hero-img.png"
+                    src={getImageSrc("/hero-img.png")}
                     alt="Michel Haussaire - Full Stack & Mobile Developer"
                     fill
                     className="object-contain relative z-10"
@@ -346,7 +347,7 @@ export default function Home() {
                   <div className="aspect-square rounded-xl overflow-hidden relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/5 group-hover:opacity-70 transition-opacity duration-500 opacity-0 z-10"></div>
                     <Image
-                      src="/placeholder.svg"
+                      src={getImageSrc("/placeholder.svg")}
                       alt="Miguel Romero - Full Stack & Mobile Developer"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       width={400}
