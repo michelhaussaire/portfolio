@@ -318,7 +318,7 @@ export default function Home() {
                   <div className="absolute top-[30%] left-[-5%] w-48 h-56 bg-gradient-to-br from-[#13d4dd]/35 to-transparent rounded-full blur-xl rotate-45 animate-pulse-slow"></div>
 
                   <Image
-                    src={getImageSrc("/hero-img.png")}
+                    src={getImageSrc("/hero-img-optimized.png")}
                     alt="Michel Haussaire - Full Stack & Mobile Developer"
                     fill
                     className="object-contain relative z-10"

@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/portfolio-v2' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
   // ... existing code ...
 };
 
